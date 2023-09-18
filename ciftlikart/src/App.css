@@ -1,7 +1,8 @@
 .App {
   text-align: center;
-  display: flex;
-  justify-content: center;
+  display: inline-block;
+  position: relative;
+  left: 10%;
 }
 
 .App-logo {
@@ -14,12 +15,37 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.counter-timer{
+  padding-top: 2rem;
+  width: 78vh;
+  height: 3rem;
+  position: relative;
+}
+
+.timer {
+  display: block;
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: orange;
+  position: absolute;
+  right: 0;
+
+}
+
+.click-count {
+  display: block;
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: green;
+  position: absolute;
+  left: 0;
+}
 
 .container {
   max-width: 700px;
   padding-top: 1rem;
   width: 98.8vw;
-  height: 98.8vh;
+  height: 80.8vh;
   border: 1px solid #110c0c;
   margin: 3px;
   position: relative;
@@ -27,18 +53,23 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-  column-gap: 5px
+  column-gap: 5px;
 }
 
 .square {
-  width: 10rem;
-  height: 10rem;
+  width: 9rem;
+  height: 9rem;
   border: 1px solid #050505;
   background-color: gray;
   font-size: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.findSquare {
+  background-color: skyblue;
 }
 
 .invisible {
