@@ -4,6 +4,22 @@
   position: relative;
   left: 10%;
 }
+.buttons{
+  width: 78vw;
+  height: 98vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: center;
+  padding:1rem;
+}
+.game-board {
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  left: 10%;
+}
 
 .App-logo {
   height: 40vmin;
@@ -17,7 +33,6 @@
 }
 .counter-timer{
   padding-top: 2rem;
-  width: 78vh;
   height: 3rem;
   position: relative;
 }

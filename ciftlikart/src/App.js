@@ -1,42 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-import Squares from './Components/Squares';
-import { useEffect, useState, useRef } from 'react';
-import Timer from './Components/Timer';
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import Game from "./Components/Game";
 
 function App() {
-  const [clickCount, setClickCount] = useState(0);
-  const [timeElapsed, setTimeElapsed] = useState("");
-  const timerRef = useRef();
+  const [startGame, setStartGame] = useState(true);
 
-
-  var handleClickCountCallBack = (clickValue) => {
-    setClickCount(clickValue);
-  }
-  var GetTimeCallback = (timelapsed) => {
-    setTimeElapsed(timelapsed);
-  }
-  const handleStopButtonClick = () => {
-    debugger;
-    if (timerRef) {
-      timerRef?.current?.stopTimer();
-    }
-  }
-  var FinishedGame = () => {
-    //stoptimer
-    handleStopButtonClick();
-    setTimeout(() => {
-      alert("Geçen süre: " + timeElapsed);
-    }, 250);
-  }
+  useEffect(() => {}, [startGame]);
 
   return (
     <div className="App">
-      <div className='counter-timer'>
-        <span className="click-count">Tık Sayınız: {clickCount}</span>
-        <Timer ref={timerRef} GetTimeCallback={GetTimeCallback} />
-      </div>
-      <Squares maxValue={4} onFinish={() => FinishedGame()} handleClickCount={handleClickCountCallBack} />
+      {startGame ? (
+        <Game NewAgain={setStartGame} />
+      ) : (
+        <div className="buttons">
+          <button onClick={()=>setStartGame(true)}>Yeniden Oyna!</button>
+          <button>Sonuçlarım</button>
+        </div>
+      )}
     </div>
   );
 }
