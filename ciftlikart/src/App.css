@@ -4,6 +4,22 @@
   position: relative;
   left: 10%;
 }
+.text-center{
+  text-align: center;
+}
+.loading{
+  margin: 10rem;
+  width: 30vw;
+  border:1px solid black;
+  border-radius: 20px;
+  box-shadow: #050505;
+}
+
+.center{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
 .buttons{
   width: 78vw;
   height: 98vh;
@@ -16,9 +32,7 @@
 }
 .game-board {
   text-align: center;
-  display: inline-block;
   position: relative;
-  left: 10%;
 }
 
 .App-logo {

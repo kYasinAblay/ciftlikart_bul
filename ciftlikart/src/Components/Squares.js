@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { flushSync } from "react-dom";
 
 export default class Squares extends Component {
   constructor(props) {
@@ -106,7 +105,7 @@ export default class Squares extends Component {
     //kaç kere bastın
     this.buttonClicked(null);
   };
-
+ 
   Squares = () => {
     var numbers = this.state.arr;
 
