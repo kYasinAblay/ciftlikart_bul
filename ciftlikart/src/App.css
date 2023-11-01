@@ -14,13 +14,7 @@
   border-radius: 20px;
   box-shadow: #050505;
 }
-
-.center{
-  display: flex;
-  align-items: center;
-  justify-content:center;
-}
-.buttons{
+.underto{
   width: 78vw;
   height: 98vh;
   display: flex;
@@ -28,6 +22,16 @@
   justify-content: center;
   text-align: center;
   vertical-align: center;
+  padding:1rem;
+  flex-direction: column;
+}
+
+.center{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+.buttons{
   padding:1rem;
 }
 .game-board {

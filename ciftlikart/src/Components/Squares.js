@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Shuffle from "./Utils/Shuffle";
 
 export default class Squares extends Component {
   constructor(props) {
@@ -34,11 +35,9 @@ export default class Squares extends Component {
       var r = Math.floor(Math.random() * 10) + 1;
       if (arr.indexOf(r) === -1) arr.push(r);
     }
-    return [...arr, ...arr];
+    return [...arr, ...Shuffle(arr)];
   };
-  // componentDidUpdate(state) {
-  //     console.log(`State ${state}`);
-  // }
+ 
   componentDidMount() {
     this.setState({ arr: this.ArrayGenerator() });
   }
