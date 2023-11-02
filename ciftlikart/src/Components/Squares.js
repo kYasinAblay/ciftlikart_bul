@@ -35,9 +35,9 @@ export default class Squares extends Component {
       var r = Math.floor(Math.random() * 10) + 1;
       if (arr.indexOf(r) === -1) arr.push(r);
     }
-    return [...arr, ...Shuffle(arr)];
+    return [...Shuffle(arr), ...arr];
   };
- 
+
   componentDidMount() {
     this.setState({ arr: this.ArrayGenerator() });
   }
@@ -46,7 +46,7 @@ export default class Squares extends Component {
     console.log("doing my job:", subject);
   }
 
-  ComparisonSquares(sq1, sq2) {
+  ComparisonSquares(sq1, sq2) { 
     if (sq1.spanElement.textContent === sq2.spanElement.textContent)
       return true;
 
@@ -57,22 +57,26 @@ export default class Squares extends Component {
       this.props.onFinish();
   }
 
-  pairAdd(spanElement, callback) {
-    this.setState(
-      (prevState) => ({
-        pair: [...prevState.pair, { spanElement }],
-      }),
-      () => {
-        callback();
-      }
-    );
+   pairAdd(spanElement, callback) {
+    if(spanElement.nodeName!=="#text"){
+      this.setState(
+        (prevState) => ({
+          pair: [...prevState.pair, { spanElement }],
+        }),
+        () => {
+          callback();
+          console.log(this.state.pair);
+        }
+      );
+    }    
   }
 
   ShowNumber = (event) => {
     var spanElement = event.target.firstChild;
     spanElement.className = "visible";
-    this.pairAdd(spanElement, () => {
+      this.pairAdd(spanElement, () => {
       const pair = this.state.pair;
+
       if (Object.keys(pair).length > 1) {
         const equalSquare = this.ComparisonSquares(pair[0], pair[1]);
 
@@ -104,7 +108,7 @@ export default class Squares extends Component {
     //kaç kere bastın
     this.buttonClicked(null);
   };
- 
+
   Squares = () => {
     var numbers = this.state.arr;
 

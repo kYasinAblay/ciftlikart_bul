@@ -31,6 +31,7 @@ export default function Game(props) {
       callback();
       setDismount(true);
     }, 250);
+    
     props.setScore(prev=> [
       ...prev,
       {

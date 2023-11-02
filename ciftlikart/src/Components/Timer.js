@@ -27,7 +27,7 @@ function Timer(props,ref) {
       var strSecond = second < 10 ? `0${second}` : second;
       const time = `${minutes}:${strSecond}`;
       setTime(time);
-      console.log(time);
+      // console.log(time);
       props.GetTimeCallback(time);
     }, 1000);
 

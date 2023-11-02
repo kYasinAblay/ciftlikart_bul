@@ -15,6 +15,5 @@ export default function Shuffle(array) {
       array[currentIndex],
     ];
   }
- console.log(array)
   return array;
 }

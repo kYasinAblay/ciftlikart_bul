@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function ScoreList(props) {
-  debugger;
   return (
     <>
        {props.scores.map((score) => (
