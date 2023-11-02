@@ -68,6 +68,8 @@ export default class Squares extends Component {
           console.log(this.state.pair);
         }
       );
+    //kaç kere bastın
+    this.buttonClicked(null);
     }    
   }
 
@@ -105,8 +107,6 @@ export default class Squares extends Component {
         });
       }
     });
-    //kaç kere bastın
-    this.buttonClicked(null);
   };
 
   Squares = () => {
