@@ -15,7 +15,7 @@ function Squares(props) {
       var r = Math.floor(Math.random() * 10) + 1;
       if (initialArr.indexOf(r) === -1) initialArr.push(r);
     }
-    return [...Shuffle(initialArr), ...initialArr];
+    return [...initialArr, ...initialArr];
   });
 
 
@@ -33,7 +33,6 @@ function Squares(props) {
   };
 
   const CheckFinish = () => {
-    if (history.length === props.maxValue)
       props.onFinish();
   };
 
@@ -51,7 +50,7 @@ function Squares(props) {
   };
 
 const ComparisonSquares = (newPair) => {
-  debugger;
+  
   if (newPair.length > 1) {
     const equalSquare = newPair[0].spanElement.textContent === newPair[1].spanElement.textContent;
 
@@ -63,13 +62,14 @@ const ComparisonSquares = (newPair) => {
       );
     });
     } else {
-      debugger;
       setHistory(prevHistory => {
+        debugger;
         const newHistory = [...prevHistory, { newPair }];
-        CheckFinish();
+        if (newHistory.length === props.maxValue)
+          CheckFinish();
+        
         return newHistory;
       });
-      
     } 
   }  
 
