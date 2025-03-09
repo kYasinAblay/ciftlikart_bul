@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect } from "react";
 import Shuffle from "./Utils/Shuffle";
 
 function Squares(props) {
@@ -17,8 +17,11 @@ function Squares(props) {
     }
     return [...Shuffle(initialArr), ...initialArr];
   });
+
+
   const [pair, setPair] = React.useState([]);
   const [history, setHistory] = React.useState([]);
+
 
   const buttonClicked = (event) => {
     setClick(prevClick => prevClick + 1);
@@ -26,10 +29,8 @@ function Squares(props) {
   };
 
   const doWork = (subject, callback) => {
-    setTimeout(callback, 1500);
+    setTimeout(callback, 1000);
   };
-
-  
 
   const CheckFinish = () => {
     if (history.length === props.maxValue)
@@ -37,40 +38,43 @@ function Squares(props) {
   };
 
   const pairAdd = (spanElement, callback) => {
-    debugger;
-    if(spanElement.nodeName!=="#text"){
-      debugger;
+       if(spanElement.nodeName!=="#text"){
       setPair(prevPair => {
-        const newPair = [...prevPair, { spanElement }];
-        
-   
-      if (pair.length > 1) {
-        const equalSquare = ComparisonSquares(pair[0], pair[1]);
-
-        if (!equalSquare) {
-          for (let item of pair) {
-            doWork(
-              "Slowmotion invisible job",
-              () => (item.spanElement.className = "invisible")
-            );
-          }
-        } else {
-          setHistory(prevHistory => {
-            const newHistory = [...prevHistory, { pair }];
-            CheckFinish();
-            return newHistory;
-          });
+        let newPair = [...prevPair, { spanElement }];
+        if(newPair.length > 1) {
+          ComparisonSquares(newPair);
+          newPair = [];
         }
-        setPair([]);
-      }
-            return newPair;
+        return newPair;
       });
     }
   };
-const ComparisonSquares = (sq1, sq2) => {
-    if (sq1.spanElement.textContent === sq2.spanElement.textContent)
-      return true;
-    return false;
+
+const ComparisonSquares = (newPair) => {
+  debugger;
+  if (newPair.length > 1) {
+    const equalSquare = newPair[0].spanElement.textContent === newPair[1].spanElement.textContent;
+
+    if (!equalSquare) {
+     newPair.forEach(item => {
+      doWork(
+        "Slowmotion invisible job", 
+        () => (item.spanElement.className = "invisible")
+      );
+    });
+    } else {
+      debugger;
+      setHistory(prevHistory => {
+        const newHistory = [...prevHistory, { newPair }];
+        CheckFinish();
+        return newHistory;
+      });
+      
+    } 
+  }  
+
+
+   
   };
   const ShowNumber = (event) => {
   
