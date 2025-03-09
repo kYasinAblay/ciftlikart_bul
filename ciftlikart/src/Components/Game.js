@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Squares from "./Squares";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import Timer from "./Timer";
 
 const sleep = async (milliseconds) => {
@@ -15,20 +15,18 @@ export default function Game(props) {
   
   var timerRef = useRef(null);
 
-  var handleClickCountCallBack = (clickValue) => {
+  var handleClickCountCallBack = useCallback((clickValue) => {
     setClickCount(clickValue);
-  };
-  var GetTimeCallback = (timelapsed) => {
-    setTimeElapsed(timelapsed);
-  };
+  }, []);
 
-  var FinishedGame = (callback) => {
+  var FinishedGame = (stopTimer) => {
+    setTimeElapsed(timerRef.current.getTime());
+    
     setTimeout(() => {
       alert("Geçen süre: " + timeElapsed);
       props.NewAgain(window.confirm("Yeniden Oynamak İstermisiniz"));
 
-      //stoptimer
-      callback();
+      stopTimer();
       setDismount(true);
     }, 250);
     
@@ -44,15 +42,18 @@ export default function Game(props) {
     sleep(3000).then(() => setDismount(false));
   };
 
+  const MemoizedTimer = useMemo(() => (
+    <Timer
+      ref={timerRef}
+      IsStopTimer={IsStopTimer}
+    />
+  ), [IsStopTimer]);
+
   return !dismount ? (
     <div className="game-board">
       <div className="counter-timer">
         <div className="click-count">Tık Sayınız: {clickCount}</div>
-        <Timer
-          ref={timerRef}
-          IsStopTimer={IsStopTimer}
-          GetTimeCallback={GetTimeCallback}
-        />
+        {MemoizedTimer}
       </div>
       <Squares
         maxValue={5}

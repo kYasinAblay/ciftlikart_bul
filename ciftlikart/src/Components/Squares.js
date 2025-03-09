@@ -1,51 +1,35 @@
-import React, { Component } from "react";
+import React, { useCallback } from "react";
 import Shuffle from "./Utils/Shuffle";
 
-//Bu dosya React Class Component'ten React Hook'a dönüştürülebilir
-//useState ve useEffect kullanılarak yeniden yazılabilir
 function Squares(props) {
-  const [click, setClick] = React.useState(0);
-  const [arr, setArr] = React.useState([]);
-  const [pair, setPair] = React.useState([]);
-  const [history, setHistory] = React.useState([]);
-
-  const buttonClicked = (event) => {
-    setClick(prevClick => {
-      const newClick = prevClick + 1;
-      props.handleClickCount(newClick);
-      return newClick;
-    });
-  };
-
-  const ArrayGenerator = () => {
-    var arr = [];
-    
+  const [click, setClick] = React.useState(1);
+  const [arr, setArr] = React.useState(() => {
+    // ArrayGenerator'ı başlangıç state'i olarak kullan
+    const initialArr = [];
     if (props.maxValue > 10) {
       throw new Error(
         "You cannot give bigger than 10, this causes infinitive looping"
       );
     }
-    while (arr.length < props.maxValue) {
+    while (initialArr.length < props.maxValue) {
       var r = Math.floor(Math.random() * 10) + 1;
-      if (arr.indexOf(r) === -1) arr.push(r);
+      if (initialArr.indexOf(r) === -1) initialArr.push(r);
     }
-        return [...Shuffle(arr), ...arr];
-  };
+    return [...Shuffle(initialArr), ...initialArr];
+  });
+  const [pair, setPair] = React.useState([]);
+  const [history, setHistory] = React.useState([]);
 
-  React.useEffect(() => {
-    setArr(ArrayGenerator());
-  }, []);
+  const buttonClicked = (event) => {
+    setClick(prevClick => prevClick + 1);
+    props.handleClickCount(click);
+  };
 
   const doWork = (subject, callback) => {
     setTimeout(callback, 1500);
-    //console.log("doing my job:", subject);
   };
 
-  const ComparisonSquares = (sq1, sq2) => {
-    if (sq1.spanElement.textContent === sq2.spanElement.textContent)
-      return true;
-    return false;
-  };
+  
 
   const CheckFinish = () => {
     if (history.length === props.maxValue)
@@ -53,22 +37,13 @@ function Squares(props) {
   };
 
   const pairAdd = (spanElement, callback) => {
+    debugger;
     if(spanElement.nodeName!=="#text"){
+      debugger;
       setPair(prevPair => {
         const newPair = [...prevPair, { spanElement }];
-        callback();
-        //console.log(newPair);
-        return newPair;
-      });
-      buttonClicked(null);
-    }
-  };
-
-  const ShowNumber = (event) => {
-    var spanElement = event.target.firstChild;
-    spanElement.className = "visible";
-    
-    pairAdd(spanElement, () => {
+        
+   
       if (pair.length > 1) {
         const equalSquare = ComparisonSquares(pair[0], pair[1]);
 
@@ -86,10 +61,23 @@ function Squares(props) {
             return newHistory;
           });
         }
-        
         setPair([]);
       }
-    });
+            return newPair;
+      });
+    }
+  };
+const ComparisonSquares = (sq1, sq2) => {
+    if (sq1.spanElement.textContent === sq2.spanElement.textContent)
+      return true;
+    return false;
+  };
+  const ShowNumber = (event) => {
+  
+    var spanElement = event.target.firstChild;
+    spanElement.className = "visible";
+    
+    pairAdd(spanElement);
   };
 
   const Squares = () => {
@@ -99,7 +87,7 @@ function Squares(props) {
         <div
           key={index}
           className="square"
-          onClick={async (e) => await ShowNumber(e)}
+          onClick={async (e) => {await ShowNumber(e); buttonClicked(e);}}
         >
           <span key={index} className="invisible">
             {value}
