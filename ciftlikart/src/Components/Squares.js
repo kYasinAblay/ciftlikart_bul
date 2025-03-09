@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import Shuffle from "./Utils/Shuffle";
 
 function Squares(props) {
   const [click, setClick] = React.useState(1);
   const [arr, setArr] = React.useState(() => {
-    // ArrayGenerator'ı başlangıç state'i olarak kullan
     const initialArr = [];
     if (props.maxValue > 10) {
       throw new Error(
@@ -18,26 +17,57 @@ function Squares(props) {
     return [...initialArr, ...initialArr];
   });
 
-
   const [pair, setPair] = React.useState([]);
   const [history, setHistory] = React.useState([]);
 
-
-  const buttonClicked = (event) => {
+  const buttonClicked = useCallback((event) => {
     setClick(prevClick => prevClick + 1);
     props.handleClickCount(click);
-  };
+  }, [click, props]);
 
-  const doWork = (subject, callback) => {
+  const doWork = useCallback((subject, callback) => {
     setTimeout(callback, 1000);
-  };
+  }, []);
 
-  const CheckFinish = () => {
+  const [shouldCheckFinish, setShouldCheckFinish] = React.useState(false);
+
+  useEffect(() => {
+    if (shouldCheckFinish) {
       props.onFinish();
-  };
+      setClick(0);
+      props.handleClickCount(0);
+      setShouldCheckFinish(false);
+    }
+  }, [shouldCheckFinish, setClick]);
 
-  const pairAdd = (spanElement, callback) => {
-       if(spanElement.nodeName!=="#text"){
+  const CheckFinish = useCallback(() => {
+    setShouldCheckFinish(true);
+  }, []);
+
+  const ComparisonSquares = useCallback((newPair) => {
+    if (newPair.length > 1) {
+      const equalSquare = newPair[0].spanElement.textContent === newPair[1].spanElement.textContent;
+
+      if (!equalSquare) {
+        newPair.forEach(item => {
+          doWork(
+            "Slowmotion invisible job",
+            () => (item.spanElement.className = "invisible")
+          );
+        });
+      } else {
+        setHistory(prevHistory => {
+          const newHistory = [...prevHistory, { newPair }];
+          if (newHistory.length === props.maxValue)
+            CheckFinish();
+          return newHistory;
+        });
+      }
+    }
+  }, [doWork, props.maxValue, CheckFinish]);
+
+  const pairAdd = useCallback((spanElement) => {
+    if(spanElement.nodeName !== "#text"){
       setPair(prevPair => {
         let newPair = [...prevPair, { spanElement }];
         if(newPair.length > 1) {
@@ -47,51 +77,22 @@ function Squares(props) {
         return newPair;
       });
     }
-  };
+  }, [ComparisonSquares]);
 
-const ComparisonSquares = (newPair) => {
-  
-  if (newPair.length > 1) {
-    const equalSquare = newPair[0].spanElement.textContent === newPair[1].spanElement.textContent;
-
-    if (!equalSquare) {
-     newPair.forEach(item => {
-      doWork(
-        "Slowmotion invisible job", 
-        () => (item.spanElement.className = "invisible")
-      );
-    });
-    } else {
-      setHistory(prevHistory => {
-        debugger;
-        const newHistory = [...prevHistory, { newPair }];
-        if (newHistory.length === props.maxValue)
-          CheckFinish();
-        
-        return newHistory;
-      });
-    } 
-  }  
-
-
-   
-  };
-  const ShowNumber = (event) => {
-  
+  const ShowNumber = useCallback((event) => {
     var spanElement = event.target.firstChild;
     spanElement.className = "visible";
-    
     pairAdd(spanElement);
-  };
+  }, [pairAdd]);
 
-  const Squares = () => {
+  const Squares = useCallback(() => {
     console.log("Squares",arr);
     var squaresDiv = arr.map((value, index) => {
       return (
         <div
           key={index}
           className="square"
-          onClick={async (e) => {await ShowNumber(e); buttonClicked(e);}}
+          onClick={(e) => {ShowNumber(e); buttonClicked(e);}}
         >
           <span key={index} className="invisible">
             {value}
@@ -100,7 +101,7 @@ const ComparisonSquares = (newPair) => {
       );
     });
     return squaresDiv;
-  };
+  }, [arr, ShowNumber, buttonClicked]);
 
   return <div className="container">{Squares()}</div>;
 }

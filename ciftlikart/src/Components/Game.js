@@ -3,8 +3,14 @@ import Squares from "./Squares";
 import { useState, useRef, useMemo } from "react";
 import Timer from "./Timer";
 
-const sleep = async (milliseconds) => {
-  return await new Promise((resolve) => setTimeout(resolve, milliseconds));
+const sleep = (milliseconds) => {
+  return new Promise((resolve, reject) => {
+    try {
+      setTimeout(resolve, milliseconds);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 export default function Game(props) {
@@ -20,10 +26,11 @@ export default function Game(props) {
   }, []);
 
   var FinishedGame = (stopTimer) => {
-    setTimeElapsed(timerRef.current.getTime());
-    
+  
+    var elapsed = timerRef.current.getTime();
+   
     setTimeout(() => {
-      alert("Geçen süre: " + timeElapsed);
+      alert("Geçen süre: " + elapsed);
       props.NewAgain(window.confirm("Yeniden Oynamak İstermisiniz"));
 
       stopTimer();
@@ -35,7 +42,7 @@ export default function Game(props) {
       {
         gamer: "Gamer",
         clickCount: clickCount,
-        score: timeElapsed,
+        score: elapsed,
         dateTime: Date.UTC.toString(),
       }
     ]);
@@ -47,7 +54,15 @@ export default function Game(props) {
       ref={timerRef}
       IsStopTimer={IsStopTimer}
     />
-  ), [IsStopTimer]);
+  ), [IsStopTimer,FinishedGame]);
+
+  const MemoizedSquares = useMemo(() => (<Squares
+        maxValue={5}
+        onFinish={() => FinishedGame(timerRef.current.resetValues)}
+        handleClickCount={handleClickCountCallBack}
+      />
+    
+  ), [handleClickCountCallBack,FinishedGame]);
 
   return !dismount ? (
     <div className="game-board">
@@ -55,11 +70,8 @@ export default function Game(props) {
         <div className="click-count">Tık Sayınız: {clickCount}</div>
         {MemoizedTimer}
       </div>
-      <Squares
-        maxValue={5}
-        onFinish={() => FinishedGame(timerRef.current.resetValues)}
-        handleClickCount={handleClickCountCallBack}
-      />
+      {MemoizedSquares}
+      
     </div>
   ) : (
     <div className="loading">Loading...</div>
