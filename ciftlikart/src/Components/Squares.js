@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import Shuffle from "./Utils/Shuffle";
 
+//- "Bu komponentin state yönetimi nasıl yapılmış?"     
+
 function Squares(props) {
   const [click, setClick] = React.useState(1);
   const [arr, setArr] = React.useState(() => {

@@ -6,6 +6,7 @@ import React, {
   useCallback
 } from "react";
 
+
 function Timer({IsStopTimer}, ref) {
   const [time, setTime] = useState("0:00");
   const [second, setSeconds] = useState(0);
@@ -40,10 +41,13 @@ function Timer({IsStopTimer}, ref) {
     }
   }, [IsStopTimer, formatTime]);
 
+  
+
   useEffect(() => {
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
   }, [updateTimer]);
+
 
   return (
     <div className="timer" style={{ fontSize: "3rem", display: "block" }}>
