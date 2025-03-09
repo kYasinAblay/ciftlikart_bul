@@ -10,7 +10,7 @@ function Timer(props,ref) {
     resetValues() {
       setTime("0:00");
       setSeconds(0);
-      console.log("child component values was reset.");
+      //console.log("child component values was reset.");
     }
   }));
 
